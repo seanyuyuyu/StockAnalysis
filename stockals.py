@@ -132,7 +132,8 @@ if __name__ == '__main__':
                 ['150182','军工B'],
                 ['150290','煤炭B级'],
                 ['150131','医药B'],
-                ['150197','有色B']]
+                ['150197','有色B']],
+                ['300446','乐凯新材']
 
     now = datetime.datetime.now()
     sendmsg='start:'+now.strftime('%Y-%m-%d %H:%M:%S')+'\n'
@@ -144,5 +145,5 @@ if __name__ == '__main__':
     print "sending email..."
     sendmsg1=sendmsg.decode("utf-8")
     print sendmsg
-    send_mail(mailto_list,"分析结果",sendmsg1)
+    send_mail(mailto_list,"分析结果"+now.strftime('%Y.%m.%d'),sendmsg1)
     print "email done!"
