@@ -14,7 +14,7 @@ import datetime
  #   reload(sys)
  #   sys.setdefaultencoding(default_encoding)
 
-mailto_list=['yuxg139@139.com','939260396@qq.com']           #收件人(列表)  
+mailto_list=['yuxg139@139.com']           #收件人(列表)  
 mail_host="smtp.163.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
 mail_user="loglyer"                           #用户名  
 mail_pass="qwe123"                             #密码  
@@ -132,8 +132,8 @@ if __name__ == '__main__':
                 ['150182','军工B'],
                 ['150290','煤炭B级'],
                 ['150131','医药B'],
-                ['150197','有色B']],
-                ['300446','乐凯新材']
+                ['150197','有色B'],
+                ['300446','乐凯新材']]
 
     now = datetime.datetime.now()
     sendmsg='start:'+now.strftime('%Y-%m-%d %H:%M:%S')+'\n'
