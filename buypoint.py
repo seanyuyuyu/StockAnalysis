@@ -59,8 +59,9 @@ def get_all_price(code_list):
     	P1=H1-L1
     	zl=L1+P1*7/8
     	zc=L1+P1*0.5/8
-    	sendmsg=sendmsg+"code: "+STOCK[i]+"buy price:"+str(zl)+" sell price: "+str(zc)+"\n"
-    	print "code: %s ,buy price: %3.2f ,sell price: %3.2f" %(STOCK[i],zl,zc)  
+    	s="code: %s ,buy price: %3.2f ,sell price: %3.2f" %(STOCK[i],zl,zc)
+    	sendmsg=sendmsg+s+"\n"
+    	print s
   
 if __name__ == '__main__':  
     STOCK = ['300446',
@@ -85,4 +86,5 @@ if __name__ == '__main__':
 
     get_all_price(STOCK)  
     sendmsg1=sendmsg.decode("utf-8")
+    #print sendmsg1
     send_mail(mailto_list,"买卖点"+now.strftime('%Y.%m.%d'),sendmsg1)
