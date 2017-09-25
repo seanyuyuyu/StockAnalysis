@@ -59,7 +59,7 @@ def get_all_price(code_list):
     	P1=H1-L1
     	zl=L1+P1*7/8
     	zc=L1+P1*0.5/8
-    	s="code: %s ,buy price: %3.2f ,sell price: %3.2f" %(STOCK[i],zl,zc)
+    	s="code: %s ,sell price: %3.2f ,buy price: %3.2f" %(STOCK[i],zl,zc)
     	sendmsg=sendmsg+s+"\n"
     	print s
   
