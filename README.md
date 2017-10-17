@@ -1,5 +1,3 @@
-# StockAnalysis
-
 tushare.waditu.com
 
 talib安装
@@ -101,8 +99,8 @@ UnicodeEncodeError: 'ascii' codec can't encode characters in position 29-32: ord
 #import sys
 #default_encoding = 'utf-8'
 #if sys.getdefaultencoding() != default_encoding:
-#   reload(sys)
-#   sys.setdefaultencoding(default_encoding)
+ #   reload(sys)
+ #   sys.setdefaultencoding(default_encoding)
 把缺省编码变为utf8，这里ok，但发邮件又出现问题
 强制手工转换：
 sendmsg=sendmsg+point.encode("gbk")+'\n’
@@ -117,3 +115,82 @@ sendmsg1=sendmsg.decode("utf-8")
 然后把发送邮件的内容编码变为gb2312
 msg = MIMEText(content,'plain','gb2312') 
 问题解决
+
+9.20 buypoint.py 开始
+目标：建立一个日内买卖点的提示程序，在10：30或11：00给出日内T的买卖点价位
+公式：
+#MA30:=EMA(CLOSE,30);
+#强弱:EMA(CLOSE,900);
+#STICKLINE((MA30>强弱),MA30,强弱,1,0),COLOR0000FF;
+#STICKLINE((MA30<强弱),MA30,强弱,1,0),COLOR00FF00;
+#H1:=MAX(DYNAINFO(3),DYNAINFO(5));
+#L1:=MIN(DYNAINFO(3),DYNAINFO(6));
+#P1:=H1-L1;
+#阻力:L1+P1*7/8,COLOR00DD00;
+#支撑:L1+P1*0.5/8,COLOR00DD00;
+#现价:CLOSE,COLORWHITE,LINETHICK1;
+#STICKLINE(CROSS(支撑,现价),支撑,阻力,1,0),COLORYELLOW;
+#DRAWTEXT(LONGCROSS(支撑,现价,2),支撑*1.001,'★B'),COLORYELLOW;{吸}
+#DRAWTEXT(LONGCROSS(现价,阻力,2),现价,'★'),COLORRED;{抛};
+
+当天历史分笔
+>>> df=ts.get_today_ticks('300446')
+[Getting data:]####################>>> df.head(10)
+       time  price pchange  change  volume  amount type
+0  15:00:03  29.45   +1.27   -0.03     203  597835   卖盘
+1  14:57:03  29.48   +1.38    0.00       0       0   买盘
+2  14:57:00  29.48   +1.38    0.00       4   11792   买盘
+3  14:56:57  29.48   +1.38    0.00      29   85492   买盘
+4  14:56:42  29.48   +1.38    0.00       5   14740   买盘
+5  14:56:39  29.48   +1.38    0.00      44  129712   买盘
+6  14:56:30  29.48   +1.38    0.00       1    2948   买盘
+7  14:56:24  29.48   +1.38    0.00      10   29480   买盘
+8  14:56:21  29.48   +1.38    0.00       6   17688  中性盘
+9  14:56:15  29.48   +1.38    0.00       7   20636   卖盘
+
+实时分笔
+>>> df=ts.get_realtime_quotes('300446')
+>>> df.head(10)
+   name    open pre_close   price    high     low     bid     ask   volume  \
+0  乐凯新材  29.000    29.080  29.450  29.550  28.970  29.450  29.460  1521175   
+
+         amount   ...      a2_p a3_v    a3_p a4_v    a4_p a5_v    a5_p  \
+0  44530504.000   ...    29.470  183  29.480  152  29.490   71  29.500   
+
+         date      time    code  
+0  2017-09-20  15:05:03  300446  
+
+[1 rows x 33 columns]
+>>> df[[‘code','name','price','bid','ask','volume','amount','time']]
+     code  name   price     bid     ask   volume        amount      time
+0  300446  乐凯新材  29.450  29.450  29.460  1521175  44530504.000  15:05:03
+
+历史分笔可以看到很多笔数据，实时分笔只能看到最近的一笔数据
+看起来应该用历史分笔，如果他能够给出到目前时间点的数据
+
+获取数据
+>>> df.ix[0,1]
+u'29.000'
+>>> df.ix[0,'low']
+u'28.970'
+>>> df.ix[0,'pre_close']
+u'29.080'
+>>> i=df.ix[0,'pre_close']
+>>> print i
+29.080
+>>> print i*j
+29.08029.080
+获取后类型为object，不能直接运算，要进行转换
+>>> k=float(i)
+>>> print k
+29.08
+>>> print k*2
+58.16
+>>> print k*j
+58.16
+
+
+10.12
+sklearn需要大于50以上的样本
+regression线性回归可以跟踪给出预测，应在新股涨幅的预测比较好
+
