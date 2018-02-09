@@ -15,14 +15,14 @@ import datetime
  #   sys.setdefaultencoding(default_encoding)
 
 mailto_list=['yuxg139@139.com']           #收件人(列表)  
-mail_host="smtp.163.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
-mail_user="loglyer"                           #用户名  
-mail_pass="qwe123"                             #密码  
-mail_postfix="163.com"                     #邮箱的后缀，网易就是163.com  
+mail_host="email-smtp.us-east-1.amazonaws.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
+mail_user="AKIAIYSX6N4VNK4JM2WA"                           #用户名  
+mail_pass="AnnsgD0qfK3VSFnkRHjj8fOph3zMXi3P1Zsa+pAljFZs"                             #密码  
+mail_postfix="qq.com"                     #邮箱的后缀，网易就是163.com  
 #sendmsg='start:'
 
 def send_mail(to_list,sub,content):  
-    me="StockAnalyst"+"<"+mail_user+"@"+mail_postfix+">"  
+    me="StockAnalyst"+"<"+"yuxg"+"@"+mail_postfix+">"  
     #msg = MIMEText(content,_subtype='plain')  
     msg = MIMEText(content,'plain','gb2312')  
     #msg = MIMEText(content,format,'GB2312') 
@@ -32,6 +32,9 @@ def send_mail(to_list,sub,content):
     try:  
         server = smtplib.SMTP()  
         server.connect(mail_host)                            #连接服务器  
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
         server.login(mail_user,mail_pass)               #登录操作  
         server.sendmail(me, to_list, msg.as_string())  
         server.close()  
