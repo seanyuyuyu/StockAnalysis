@@ -52,7 +52,7 @@ def parse(code_list):
     sell_date = []  
     df = ts.get_hist_data(STOCK)  
     df=df.sort_index(axis=0)
-    global sendmsg
+    global sendmsg,temp
 
     ma20 = df[u'ma20']  
     close = df[u'close']  
@@ -100,6 +100,7 @@ def parse(code_list):
     if len(sell_val)<len(buy_val):
         i+=1
         trend='Up'
+        temp=temp+5
         print "buy date : %s, buy price : %.2f" %(buy_date[i], buy_val[i])
         bdstr=buy_date[i]
         buydate=datetime.datetime.strptime(bdstr,'%Y-%m-%d')
@@ -127,7 +128,7 @@ if __name__ == '__main__':
                 ['399300','沪深300'],
                 ['399102','创业板综'],
                 ['150019','银华锐进'],
-                ['150021','券商B'],
+                ['150201','券商B'],
                 ['150153','创业板B'],
                 ['150222','中航军B'],
                 ['150210','国企改B'],
@@ -138,18 +139,24 @@ if __name__ == '__main__':
                 ['150197','有色B'],
                 ['150118','房地产B'],
                 ['150288','钢铁B'],
-                ['300446','乐凯新材'],
-                ['000001','平安银行'],
-                ['600926','杭州银行']]
+                ['150052','沪深300B'],
+                ['150172','证券B'],
+                ['150290','煤炭B'],
+                ['150023','深成指B'],
+                ['150206','国防B'],
+                ['150212','新能车B']]
 
     now = datetime.datetime.now()
     sendmsg='start:'+now.strftime('%Y-%m-%d %H:%M:%S')+'\n'
+    temp=0
     for i in range(len(stockpool)):
         STOCK = stockpool[i][0]  
         NAME= stockpool[i][1]    ##浦发
         parse(STOCK)  
 
     print "sending email..."
+    strtemp='stock temperature is:%d\n' %temp
+    sendmsg=strtemp+sendmsg
     sendmsg1=sendmsg.decode("utf-8")
     print sendmsg
     send_mail(mailto_list,"分析结果"+now.strftime('%Y.%m.%d'),sendmsg1)
