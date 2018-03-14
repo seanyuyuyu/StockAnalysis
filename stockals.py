@@ -8,6 +8,7 @@ import talib as ta
 import smtplib  
 from email.mime.text import MIMEText  
 import datetime
+import pandas as pd 
 #import sys
 #default_encoding = 'utf-8'
 #if sys.getdefaultencoding() != default_encoding:
@@ -122,6 +123,18 @@ def parse(code_list):
 
   
     #print "rate: %.2f" % rate  
+
+def append_excel(filename,tpr):  
+    now = datetime.datetime.now()
+    dt=now.strftime('%Y-%m-%d')
+
+    df1 = pd.read_excel(filename,'Sheet1')
+    df1.loc[df1.shape[0]+1] = {'date':dt,'temperature':tpr}
+
+    writer = pd.ExcelWriter(filename)
+    ##df1 = pd.DataFrame(data={'date':[dt], 'temp':[2]})
+    df1.to_excel(writer,'Sheet1')
+    writer.save()  
   
 if __name__ == '__main__':  
     stockpool=[['sh','上证指数'],
@@ -156,6 +169,8 @@ if __name__ == '__main__':
 
     print "sending email..."
     strtemp='stock temperature is:%d\n' %temp
+    append_excel('temperature.xls',temp) ##写入温度记录excel文件
+
     sendmsg=strtemp+sendmsg
     sendmsg1=sendmsg.decode("utf-8")
     print sendmsg
