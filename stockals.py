@@ -53,7 +53,7 @@ def parse(code_list):
     sell_date = []  
     df = ts.get_hist_data(STOCK)  
     df=df.sort_index(axis=0)
-    global sendmsg,temp
+    global sendmsg,temp,oper
 
     ma20 = df[u'ma20']  
     close = df[u'close']  
@@ -109,12 +109,17 @@ def parse(code_list):
         if int(delta.days)<6:
             point='buy: '+buy_date[i]+' '+bytes(buy_val[i])
             #print "point is: %s" %point
+        if int(delta.days)<2:  ##如果是当天发生的
+            oper='buy:'+NAME+' '
+
     else: 
         sdstr=sell_date[i]
         selldate=datetime.datetime.strptime(sdstr,'%Y-%m-%d')
         delta=now-selldate
         if int(delta.days)<6: #比较当前日期和买卖点差5天内，如果是就提示买卖点，now和buydate
             point='sell: '+sell_date[i]+' '+bytes(sell_val[i])
+        if int(delta.days)<2:  ##如果是当天发生的
+            oper='sell:'+NAME+' '
     print "Trend is : %s" %trend 
     #print "point is: %s" %point
     #print type(point.encode("gbk"))
@@ -124,12 +129,12 @@ def parse(code_list):
   
     #print "rate: %.2f" % rate  
 
-def append_excel(filename,tpr):  
+def append_excel(filename,temp,op):  
     now = datetime.datetime.now()
     dt=now.strftime('%Y-%m-%d')
 
     df1 = pd.read_excel(filename,'Sheet1')
-    df1.loc[df1.shape[0]+1] = {'date':dt,'temperature':tpr}
+    df1.loc[df1.shape[0]+1] = {'date':dt,'temperature':temp,'operation':op}
 
     writer = pd.ExcelWriter(filename)
     ##df1 = pd.DataFrame(data={'date':[dt], 'temp':[2]})
@@ -162,6 +167,7 @@ if __name__ == '__main__':
     now = datetime.datetime.now()
     sendmsg='start:'+now.strftime('%Y-%m-%d %H:%M:%S')+'\n'
     temp=0
+    oper=''
     for i in range(len(stockpool)):
         STOCK = stockpool[i][0]  
         NAME= stockpool[i][1]    ##浦发
@@ -169,7 +175,8 @@ if __name__ == '__main__':
 
     print "sending email..."
     strtemp='stock temperature is:%d\n' %temp
-    append_excel('temperature.xls',temp) ##写入温度记录excel文件
+    oper=oper.decode("utf-8")
+    append_excel('temperature.xls',temp,oper) ##写入温度记录excel文件
 
     sendmsg=strtemp+sendmsg
     sendmsg1=sendmsg.decode("utf-8")
