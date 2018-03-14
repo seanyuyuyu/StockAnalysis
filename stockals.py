@@ -110,7 +110,7 @@ def parse(code_list):
             point='buy: '+buy_date[i]+' '+bytes(buy_val[i])
             #print "point is: %s" %point
         if int(delta.days)<2:  ##如果是当天发生的
-            oper='buy:'+NAME+' '
+            oper=oper+'buy:'+NAME+' '
 
     else: 
         sdstr=sell_date[i]
@@ -119,7 +119,7 @@ def parse(code_list):
         if int(delta.days)<6: #比较当前日期和买卖点差5天内，如果是就提示买卖点，now和buydate
             point='sell: '+sell_date[i]+' '+bytes(sell_val[i])
         if int(delta.days)<2:  ##如果是当天发生的
-            oper='sell:'+NAME+' '
+            oper=oper+'sell:'+NAME+' '
     print "Trend is : %s" %trend 
     #print "point is: %s" %point
     #print type(point.encode("gbk"))
