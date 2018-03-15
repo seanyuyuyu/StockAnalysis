@@ -109,7 +109,7 @@ def parse(code_list):
         if int(delta.days)<6:
             point='buy: '+buy_date[i]+' '+bytes(buy_val[i])
             #print "point is: %s" %point
-        if int(delta.days)<2:  ##如果是当天发生的
+        if int(delta.days)<1:  ##如果是当天发生的
             oper=oper+'buy:'+NAME+' '
 
     else: 
@@ -118,7 +118,7 @@ def parse(code_list):
         delta=now-selldate
         if int(delta.days)<6: #比较当前日期和买卖点差5天内，如果是就提示买卖点，now和buydate
             point='sell: '+sell_date[i]+' '+bytes(sell_val[i])
-        if int(delta.days)<2:  ##如果是当天发生的
+        if int(delta.days)<1:  ##如果是当天发生的
             oper=oper+'sell:'+NAME+' '
     print "Trend is : %s" %trend 
     #print "point is: %s" %point
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     print "sending email..."
     strtemp='stock temperature is:%d\n' %temp
     oper=oper.decode("utf-8")
-    append_excel('temperature.xls',temp,oper) ##写入温度记录excel文件
+    append_excel('/home/ubuntu/StockAnalysis/temperature.xls',temp,oper) ##写入温度记录excel文件，这里要修改为绝对路径，或者是程序判断和脚本同目录下
 
     sendmsg=strtemp+sendmsg
     sendmsg1=sendmsg.decode("utf-8")
