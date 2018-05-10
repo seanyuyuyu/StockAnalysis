@@ -180,6 +180,14 @@ if __name__ == '__main__':
 
     sendmsg=strtemp+sendmsg
     sendmsg1=sendmsg.decode("utf-8")
+    
+
+    ## 2018-5-10 加入记录最近10天的温度功能，先从温度表格中取出最近10天的温度，然后取tail（10），之后转换成字符串，写入到邮件内
+    df=pd.read_excel('/home/ubuntu/StockAnalysis/temperature.xls')
+    df=df.tail(10)
+    strtemp=df.to_string()
+    sendmsg=sendmsg+strtemp
+
     print sendmsg
     send_mail(mailto_list,"分析结果"+now.strftime('%Y.%m.%d'),sendmsg1)
     print "email done!"
