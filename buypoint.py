@@ -26,7 +26,7 @@ import datetime
 mailto_list=['yuxg139@139.com']           #收件人(列表)  
 mail_host="email-smtp.us-east-1.amazonaws.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
 mail_user="AKIAIYSX6N4VNK4JM2WA"                           #用户名  
-mail_pass="AnnsgD0qfK3VSFnkRHjj8fOph3zMXi3P1Zsa+pAljFZs"                             #密码  
+mail_pass="AqB3P4MVAcYY3kNhY0GiBNOt3/yTIP9QzyyK8Isd0pBo"                             #密码  
 mail_postfix="qq.com"                     #邮箱的后缀，网易就是163.com  
 #sendmsg='start:'
 
