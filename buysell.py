@@ -62,5 +62,5 @@ def parse(code_list):
     print "rate: %.2f" % rate  
   
 if __name__ == '__main__':  
-    STOCK = '000697'       ##浦发
+    STOCK = '150290'       ##浦发
     parse(STOCK)  

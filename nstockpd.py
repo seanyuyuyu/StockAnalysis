@@ -17,6 +17,7 @@ if __name__ == '__main__':
 	x=x.drop(u'涨停数',1)
 	x=x.drop(u'破板涨幅',1)
 	X=x.values
+	print x
 
 	X=scale(X)
 
@@ -24,9 +25,10 @@ if __name__ == '__main__':
 
 	X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
 
-	knn=neighbors.KNeighborsClassifier(n_neighbors=5)
+	knn=neighbors.KNeighborsClassifier(n_neighbors=15)
 	knn_model=knn.fit(X_train,y_train)
 
 	y_true,y_pred=y_test,knn_model.predict(X_test)
 	print knn_model.score(X_test,y_test)
 	print classification_report(y_true,y_pred)
+	print knn_model.predict(X)

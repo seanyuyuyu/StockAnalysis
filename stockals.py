@@ -15,15 +15,23 @@ import pandas as pd
  #   reload(sys)
  #   sys.setdefaultencoding(default_encoding)
 
-mailto_list=['yuxg139@139.com']           #收件人(列表)  
-mail_host="email-smtp.us-east-1.amazonaws.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
-mail_user="AKIAJX6GFA7H6GOBJ5FA"                           #用户名  
-mail_pass="Ap3U0Nv/38o3OiK+kVvbtYrfklKdPXfpZxyBmDUT8fZn"                             #密码  
-mail_postfix="qq.com"                     #邮箱的后缀，网易就是163.com  
+#mailto_list=['yuxg139@139.com']           #收件人(列表)  
+#mail_host="email-smtp.us-east-1.amazonaws.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
+#mail_user="AKIAJX6GFA7H6GOBJ5FA"                           #用户名  
+#mail_pass="Ap3U0Nv/38o3OiK+kVvbtYrfklKdPXfpZxyBmDUT8fZn"                             #密码  
+#mail_postfix="qq.com"                     #邮箱的后缀，网易就是163.com  
 #sendmsg='start:'
+#2020/7/6
+mailto_list=['yuxg139@139.com']           #收件人(列表)  
+mail_host="smtp.163.com"            #使用的邮箱的smtp服务器地址，这里是163的smtp地址  
+mail_user="loglyer1"                           #用户名  
+mail_pass="GQWJDUKVWNOJLPOH"                             #密码  GQWJDUKVWNOJLPOH qwe123
+mail_postfix="163.com"    
+#2020/7/6
 
 def send_mail(to_list,sub,content):  
-    me="StockAnalyst"+"<"+"yuxg"+"@"+mail_postfix+">"  
+    #me="StockAnalyst"+"<"+"yuxg"+"@"+mail_postfix+">"  
+    me="hello"+"<"+mail_user+"@"+mail_postfix+">"  
     #msg = MIMEText(content,_subtype='plain')  
     msg = MIMEText(content,'plain','gb2312')  
     #msg = MIMEText(content,format,'GB2312') 
@@ -98,7 +106,7 @@ def parse(code_list):
     ndays=datetime.timedelta(days=6)   
     trend='Down'    
     point=''
-    if len(sell_val)<len(buy_val):
+    if len(sell_val) <  len(buy_val):
         i+=1
         trend='Up'
         temp=temp+5
@@ -162,7 +170,12 @@ if __name__ == '__main__':
                 ['150270','白酒B'],
                 ['150023','深成指B'],
                 ['150195','互联网B'],
-                ['502050','上证50B']]
+                ['502050','上证50B'],
+                ['159995','芯片ETF'],
+                ['000681','视觉中国'],
+                ['000697','炼石航空'],
+                ['300446','乐凯新材'],
+                ['601360','三六零']]
 
     now = datetime.datetime.now()
     sendmsg='start:'+now.strftime('%Y-%m-%d %H:%M:%S')+'\n'
@@ -176,14 +189,14 @@ if __name__ == '__main__':
     print "sending email..."
     strtemp='stock temperature is:%d\n' %temp
     oper=oper.decode("utf-8")
-    append_excel('/home/ubuntu/StockAnalysis/temperature.xls',temp,oper) ##写入温度记录excel文件，这里要修改为绝对路径，或者是程序判断和脚本同目录下
+    append_excel('temperature.xls',temp,oper) ##写入温度记录excel文件，这里要修改为绝对路径，或者是程序判断和脚本同目录下
 
     sendmsg=strtemp+sendmsg
     sendmsg=sendmsg.decode("utf-8")
     
 
     ## 2018-5-10 加入记录最近10天的温度功能，先从温度表格中取出最近10天的温度，然后取tail（10），之后转换成字符串，写入到邮件内
-    df=pd.read_excel('/home/ubuntu/StockAnalysis/temperature.xls')
+    df=pd.read_excel('temperature.xls')
     df=df.tail(10)
     strtemp=df.to_string()
     sendmsg1=sendmsg+strtemp
